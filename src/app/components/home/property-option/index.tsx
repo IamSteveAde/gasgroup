@@ -167,20 +167,45 @@ function Stat({ icon: Icon, value, label }: any) {
 }
 
 /* =====================================================
-   HISTORY — MOBILE-SAFE TIMELINE
+   HISTORY — RESPONSIVE TIMELINE (CONTENT ALWAYS VISIBLE)
 ===================================================== */
 function History() {
   const timeline = [
-    { year: "2001", image: "/images/hero/subsi.png" },
-    { year: "2010", image: "/images/hero/operational.png" },
-    { year: "2017", image: "/images/hero/integrated.png" },
-    { year: "2022", image: "/images/hero/2022.png" },
-    { year: "2026", image: "/images/hero/future.png" },
+    {
+      year: "2001",
+      title: "Subsidiary Operations",
+      text: "Formation of subsidiaries supporting diverse energy operations.",
+      image: "/images/hero/subsi.png",
+    },
+    {
+      year: "2010",
+      title: "Operational Expansion",
+      text: "Expansion into engineering, logistics, and procurement services.",
+      image: "/images/hero/operational.png",
+    },
+    {
+      year: "2017",
+      title: "Deploying Integrated Solutions",
+      text: "Advanced solutions for discovery, extraction, and supply.",
+      image: "/images/hero/integrated.png",
+    },
+    {
+      year: "2022",
+      title: "Regional Growth",
+      text: "Expansion across African energy markets.",
+      image: "/images/hero/2022.png",
+    },
+    {
+      year: "2026",
+      title: "Future Outlook",
+      text: "Positioning Gas Group as a global energy services leader.",
+      image: "/images/hero/future.png",
+    },
   ];
 
   return (
     <div className="relative">
-      {/* LINE */}
+      {/* TIMELINE LINE */}
       <div className="absolute left-4 md:left-12 top-0 bottom-0 w-px bg-[#b1d436]/40" />
 
       <div className="space-y-20">
@@ -190,7 +215,13 @@ function History() {
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="grid grid-cols-[40px_1fr] md:grid-cols-[80px_1fr] gap-8 items-start"
+            transition={{ duration: 0.7 }}
+            className="
+              grid gap-8
+              grid-cols-[40px_1fr]
+              md:grid-cols-[80px_1fr]
+              items-start
+            "
           >
             {/* YEAR */}
             <div className="text-lg md:text-xl font-light text-gray-900">
@@ -198,12 +229,25 @@ function History() {
             </div>
 
             {/* CONTENT */}
-            <div className="relative">
+            <div className="relative space-y-6">
+              {/* DOT */}
               <span className="absolute -left-[28px] md:-left-[48px] top-2 h-3 w-3 rounded-full bg-[#b1d436]" />
+
+              {/* TEXT CONTENT — ALWAYS VISIBLE */}
+              <div>
+                <h4 className="text-lg md:text-xl font-medium text-gray-900">
+                  {item.title}
+                </h4>
+                <p className="mt-2 text-sm md:text-base text-gray-700 leading-relaxed max-w-xl">
+                  {item.text}
+                </p>
+              </div>
+
+              {/* IMAGE */}
               <div className="overflow-hidden rounded-2xl shadow-lg">
                 <img
                   src={item.image}
-                  alt={item.year}
+                  alt={item.title}
                   className="h-[220px] sm:h-[300px] w-full object-cover"
                 />
               </div>

@@ -5,6 +5,11 @@ import { useEffect, useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 
 /* -------------------------------------
+   TEMP LINK (ALL ROUTES POINT HERE)
+------------------------------------- */
+const LINK = "/";
+
+/* -------------------------------------
    BRAND COLORS — GAS GROUP
 ------------------------------------- */
 const BRAND = {
@@ -38,7 +43,7 @@ export default function Header() {
   }, []);
 
   /* -------------------------------------
-     Lock scroll on open
+     Lock scroll when mobile menu is open
   ------------------------------------- */
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -58,7 +63,7 @@ export default function Header() {
         <div className="container mx-auto px-6 lg:max-w-screen-xl">
           <div className="flex items-center justify-between h-20">
             {/* LOGO */}
-            <Link href="/" className="flex items-center">
+            <Link href={LINK} className="flex items-center">
               <img
                 src="/images/hero/l1.png"
                 alt="Gas Group"
@@ -68,15 +73,19 @@ export default function Header() {
 
             {/* DESKTOP NAV */}
             <nav className="hidden md:flex items-center gap-10">
+              <NavItem onDark={onDark} href={LINK}>
+                Home
+              </NavItem>
+
               <DesktopDropdown
                 label="About"
                 onDark={onDark}
                 items={[
-                  { label: "Company Overview", href: "/about" },
-                  { label: "Our History", href: "/about#history" },
-                  { label: "Vision & Mission", href: "/about#vision" },
-                  { label: "Core Values", href: "/about#values" },
-                  { label: "Board of Directors", href: "/board-of-directors" },
+                  { label: "Company Overview", href: LINK },
+                  { label: "Our History", href: LINK },
+                  { label: "Vision & Mission", href: LINK },
+                  { label: "Core Values", href: LINK },
+                  { label: "Board of Directors", href: LINK },
                 ]}
               />
 
@@ -84,22 +93,30 @@ export default function Header() {
                 label="Operations"
                 onDark={onDark}
                 items={[
-                  { label: "Engineering Services", href: "/operations/engineering" },
-                  { label: "Liquefied Natural Gas (LNG)", href: "/operations/lng" },
-                  { label: "Exploration & Production", href: "/operations/exploration" },
-                  { label: "Drilling & Maintenance", href: "/operations/drilling" },
+                  { label: "Engineering Services", href: LINK },
+                  { label: "Liquefied Natural Gas (LNG)", href: LINK },
+                  { label: "Exploration & Production", href: LINK },
+                  { label: "Drilling & Maintenance", href: LINK },
                 ]}
               />
 
-              <NavItem onDark={onDark} href="/projects">Projects</NavItem>
-              <NavItem onDark={onDark} href="/partners">Partners</NavItem>
-              <NavItem onDark={onDark} href="/contact">Contact</NavItem>
+              <NavItem onDark={onDark} href={LINK}>Projects</NavItem>
+              <NavItem onDark={onDark} href={LINK}>Partners</NavItem>
+              <NavItem onDark={onDark} href={LINK}>Contact</NavItem>
             </nav>
 
             {/* MOBILE TOGGLE */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden h-11 w-11 rounded-full flex items-center justify-center bg-white/20 border border-black/10"
+              className="
+                md:hidden
+                h-11 w-11
+                rounded-full
+                flex items-center justify-center
+                bg-white/20
+                border border-black/10
+                shadow-[0_8px_30px_rgba(0,0,0,0.18)]
+              "
             >
               {menuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
@@ -116,13 +133,23 @@ export default function Header() {
 /* ======================================================
    DESKTOP NAV ITEM
 ====================================================== */
-function NavItem({ href, children, onDark }: any) {
+function NavItem({
+  href,
+  children,
+  onDark,
+}: {
+  href: string;
+  children: React.ReactNode;
+  onDark: boolean;
+}) {
   return (
     <Link
       href={href}
-      className={`text-[11px] tracking-[0.3em] uppercase ${
-        onDark ? "text-white/90" : "text-black/85"
-      }`}
+      className={`
+        text-[11px] tracking-[0.3em] uppercase
+        transition-colors
+        ${onDark ? "text-white/90 hover:text-white" : "text-black/85 hover:text-black"}
+      `}
     >
       {children}
     </Link>
@@ -132,22 +159,44 @@ function NavItem({ href, children, onDark }: any) {
 /* ======================================================
    DESKTOP DROPDOWN
 ====================================================== */
-function DesktopDropdown({ label, items, onDark }: any) {
+function DesktopDropdown({
+  label,
+  items,
+  onDark,
+}: {
+  label: string;
+  items: { label: string; href: string }[];
+  onDark: boolean;
+}) {
   return (
     <div className="relative group">
       <button
-        className={`flex items-center gap-2 text-[11px] tracking-[0.3em] uppercase ${
-          onDark ? "text-white/90" : "text-black/85"
-        }`}
+        className={`
+          flex items-center gap-2
+          text-[11px] tracking-[0.3em] uppercase
+          ${onDark ? "text-white/90" : "text-black/85"}
+        `}
       >
         {label}
         <ChevronDown size={14} />
       </button>
 
-      <div className="absolute top-full left-0 mt-6 min-w-[260px] rounded-2xl bg-white shadow-xl opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition">
+      <div
+        className="
+          absolute top-full left-0 mt-6
+          min-w-[260px]
+          rounded-2xl bg-white
+          shadow-[0_30px_90px_rgba(0,0,0,0.15)]
+          opacity-0 translate-y-2 pointer-events-none
+          transition-all duration-300
+          group-hover:opacity-100
+          group-hover:translate-y-0
+          group-hover:pointer-events-auto
+        "
+      >
         <ul className="py-4">
-          {items.map((item: any) => (
-            <li key={item.href}>
+          {items.map((item) => (
+            <li key={item.label}>
               <Link
                 href={item.href}
                 className="block px-6 py-3 text-sm text-black hover:bg-[#b1d436]/10"
@@ -163,32 +212,33 @@ function DesktopDropdown({ label, items, onDark }: any) {
 }
 
 /* ======================================================
-   MOBILE MENU — WORLD CLASS
+   MOBILE MENU
 ====================================================== */
 function MobileMenu({ close }: { close: () => void }) {
   return (
     <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-2xl">
       <div className="h-full overflow-y-auto px-6 py-28">
-        <div className="space-y-8 max-w-md mx-auto">
-          
+        <div className="max-w-md mx-auto space-y-8">
+          <MobileLink href={LINK} close={close}>Home</MobileLink>
+
           <MobileAccordion title="About">
-            <MobileLink href="/about" close={close}>Company Overview</MobileLink>
-            <MobileLink href="/about#history" close={close}>Our History</MobileLink>
-            <MobileLink href="/about#vision" close={close}>Vision & Mission</MobileLink>
-            <MobileLink href="/about#values" close={close}>Core Values</MobileLink>
-            <MobileLink href="/board-of-directors" close={close}>Board of Directors</MobileLink>
+            <MobileLink href={LINK} close={close}>Company Overview</MobileLink>
+            <MobileLink href={LINK} close={close}>Our History</MobileLink>
+            <MobileLink href={LINK} close={close}>Vision & Mission</MobileLink>
+            <MobileLink href={LINK} close={close}>Core Values</MobileLink>
+            <MobileLink href={LINK} close={close}>Board of Directors</MobileLink>
           </MobileAccordion>
 
           <MobileAccordion title="Operations">
-            <MobileLink href="/operations/engineering" close={close}>Engineering Services</MobileLink>
-            <MobileLink href="/operations/lng" close={close}>Liquefied Natural Gas</MobileLink>
-            <MobileLink href="/operations/exploration" close={close}>Exploration & Production</MobileLink>
-            <MobileLink href="/operations/drilling" close={close}>Drilling & Maintenance</MobileLink>
+            <MobileLink href={LINK} close={close}>Engineering Services</MobileLink>
+            <MobileLink href={LINK} close={close}>Liquefied Natural Gas</MobileLink>
+            <MobileLink href={LINK} close={close}>Exploration & Production</MobileLink>
+            <MobileLink href={LINK} close={close}>Drilling & Maintenance</MobileLink>
           </MobileAccordion>
 
-          <MobileLink href="/projects" close={close}>Projects</MobileLink>
-          <MobileLink href="/partners" close={close}>Partners</MobileLink>
-          <MobileLink href="/contact" close={close}>Contact</MobileLink>
+          <MobileLink href={LINK} close={close}>Projects</MobileLink>
+          <MobileLink href={LINK} close={close}>Partners</MobileLink>
+          <MobileLink href={LINK} close={close}>Contact</MobileLink>
         </div>
       </div>
     </div>
@@ -198,7 +248,13 @@ function MobileMenu({ close }: { close: () => void }) {
 /* ======================================================
    MOBILE ACCORDION
 ====================================================== */
-function MobileAccordion({ title, children }: any) {
+function MobileAccordion({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -221,7 +277,15 @@ function MobileAccordion({ title, children }: any) {
 /* ======================================================
    MOBILE LINK
 ====================================================== */
-function MobileLink({ href, close, children }: any) {
+function MobileLink({
+  href,
+  close,
+  children,
+}: {
+  href: string;
+  close: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <Link
       href={href}

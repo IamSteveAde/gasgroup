@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, cubicBezier } from "framer-motion";
+
 import { ArrowRight } from "lucide-react";
+
 
 /* -------------------------------------
    SLIDES
@@ -236,6 +238,10 @@ const item = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+    transition: {
+      duration: 0.9,
+      ease: cubicBezier(0.22, 1, 0.36, 1),
+    },
   },
 };
+

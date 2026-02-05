@@ -12,14 +12,13 @@ import {
 } from "lucide-react";
 
 /* =====================================================
-   COUNTER HOOK (RETRIGGERS ON EVERY VIEW)
+   COUNTER HOOK
 ===================================================== */
 function useCounter(target: number, active: boolean, duration = 1200) {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
     if (!active) return;
-
     let current = 0;
     const step = target / (duration / 16);
 
@@ -49,30 +48,33 @@ export default function AboutGasGroup() {
   >("overview");
 
   return (
-    <section className="relative py-32 bg-gradient-to-br from-[#b1d436]/20 via-white to-white">
+    <section className="relative py-24 md:py-32 bg-gradient-to-br from-[#b1d436]/20 via-white to-white">
       <div className="container mx-auto px-6 lg:max-w-screen-xl">
-        {/* TABS */}
-        <div className="mb-20 flex gap-12 border-b border-gray-300">
-          {[
-            ["overview", "Overview"],
-            ["history", "Our History"],
-            ["vision", "Vision & Mission"],
-            ["values", "Core Values"],
-          ].map(([id, label]) => (
-            <button
-              key={id}
-              onClick={() => setTab(id as any)}
-              className="relative pb-4 text-sm uppercase tracking-widest text-gray-700"
-            >
-              {label}
-              {tab === id && (
-                <motion.span
-                  layoutId="aboutTab"
-                  className="absolute left-0 right-0 -bottom-[1px] h-[3px] bg-[#b1d436]"
-                />
-              )}
-            </button>
-          ))}
+        
+        {/* TABS — RESPONSIVE */}
+        <div className="mb-16 overflow-x-auto">
+          <div className="flex w-max gap-8 md:gap-12 border-b border-gray-300">
+            {[
+              ["overview", "Overview"],
+              ["history", "Our History"],
+              ["vision", "Vision & Mission"],
+              ["values", "Core Values"],
+            ].map(([id, label]) => (
+              <button
+                key={id}
+                onClick={() => setTab(id as any)}
+                className="relative pb-4 text-xs md:text-sm uppercase tracking-widest text-gray-700 whitespace-nowrap"
+              >
+                {label}
+                {tab === id && (
+                  <motion.span
+                    layoutId="aboutTab"
+                    className="absolute left-0 right-0 -bottom-[1px] h-[3px] bg-[#b1d436]"
+                  />
+                )}
+              </button>
+            ))}
+          </div>
         </div>
 
         <AnimatePresence mode="wait">
@@ -87,7 +89,7 @@ export default function AboutGasGroup() {
 }
 
 /* =====================================================
-   OVERVIEW
+   OVERVIEW — RESPONSIVE
 ===================================================== */
 function Overview() {
   const ref = useRef<HTMLDivElement>(null);
@@ -96,7 +98,7 @@ function Overview() {
   useEffect(() => {
     const io = new IntersectionObserver(
       ([entry]) => setVisible(entry.isIntersecting),
-      { threshold: 0.5 }
+      { threshold: 0.35 }
     );
     if (ref.current) io.observe(ref.current);
     return () => io.disconnect();
@@ -109,25 +111,25 @@ function Overview() {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      className="grid gap-20 lg:grid-cols-12 items-center"
+      transition={{ duration: 0.7 }}
+      className="grid gap-16 lg:grid-cols-12 items-center"
     >
       {/* TEXT */}
       <div className="lg:col-span-6">
-        <h3 className="text-3xl md:text-4xl font-light text-black">
+        <h3 className="text-2xl md:text-3xl lg:text-4xl font-light text-black">
           Company Overview
         </h3>
 
-        <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-xl">
+        <p className="mt-6 text-base md:text-lg text-gray-700 leading-relaxed max-w-xl">
           Gas Group is a consortium of leading energy companies delivering
           world-class oil and gas services across Africa, built on safety,
           quality, and integrity.
         </p>
 
         {/* STATS */}
-        <div className="mt-16 grid gap-10 sm:grid-cols-3">
+        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <Stat icon={Users} value={engineers} label="Engineers & Workforce" />
           <Stat icon={Gauge} value={production} label="Daily Oil Production" />
           <Stat icon={Briefcase} value={projects} label="Projects Delivered" />
@@ -140,7 +142,7 @@ function Overview() {
           <img
             src="/images/hero/overview.png"
             alt="Gas Group Operations"
-            className="h-full w-full object-cover"
+            className="h-[280px] sm:h-[360px] lg:h-full w-full object-cover"
           />
         </div>
       </div>
@@ -148,111 +150,62 @@ function Overview() {
   );
 }
 
-function Stat({
-  icon: Icon,
-  value,
-  label,
-}: {
-  icon: any;
-  value: number;
-  label: string;
-}) {
+function Stat({ icon: Icon, value, label }: any) {
   return (
     <div className="flex items-center gap-4">
-      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#b1d436]/15 text-[#b1d436]">
-        <Icon size={22} />
+      <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-xl bg-[#b1d436]/15 text-[#b1d436]">
+        <Icon size={20} />
       </div>
       <div>
-        <div className="text-3xl font-light text-gray-900 leading-none">
+        <div className="text-2xl md:text-3xl font-light text-gray-900 leading-none">
           {value.toLocaleString()}
         </div>
-        <div className="mt-1 text-sm text-gray-600">{label}</div>
+        <div className="mt-1 text-xs md:text-sm text-gray-600">{label}</div>
       </div>
     </div>
   );
 }
 
 /* =====================================================
-   HISTORY — CORRECT TIMELINE GEOMETRY
+   HISTORY — MOBILE-SAFE TIMELINE
 ===================================================== */
 function History() {
   const timeline = [
-    {
-      year: "2001",
-      title: "Subsidiary Operations",
-      text: "Formation of subsidiaries supporting diverse energy operations.",
-      image: "/images/hero/subsi.png",
-    },
-    {
-      year: "2010",
-      title: "Operational Expansion",
-      text: "Expansion into engineering, logistics, and procurement services.",
-      image: "/images/hero/operational.png",
-    },
-    {
-      year: "2017",
-      title: "Deploying Integrated Solutions",
-      text: "Advanced solutions for discovery, extraction, and supply.",
-      image: "/images/hero/integrated.png",
-    },
-    {
-      year: "2022",
-      title: "Regional Growth",
-      text: "Expansion across African energy markets.",
-      image: "/images/hero/2022.png",
-    },
-    {
-      year: "2026",
-      title: "Future Outlook",
-      text: "Positioning Gas Group as a global energy services leader.",
-      image: "/images/hero/future.png",
-    },
+    { year: "2001", image: "/images/hero/subsi.png" },
+    { year: "2010", image: "/images/hero/operational.png" },
+    { year: "2017", image: "/images/hero/integrated.png" },
+    { year: "2022", image: "/images/hero/2022.png" },
+    { year: "2026", image: "/images/hero/future.png" },
   ];
 
   return (
     <div className="relative">
-      {/* VERTICAL LINE */}
-      <div className="absolute left-[96px] top-0 bottom-0 w-px bg-[#b1d436]/40" />
+      {/* LINE */}
+      <div className="absolute left-4 md:left-12 top-0 bottom-0 w-px bg-[#b1d436]/40" />
 
-      <div className="space-y-24">
-        {timeline.map((item, i) => (
+      <div className="space-y-20">
+        {timeline.map((item) => (
           <motion.div
             key={item.year}
-            initial={{ opacity: 0, y: 32 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="grid grid-cols-[80px_32px_1fr] gap-8 items-start"
+            className="grid grid-cols-[40px_1fr] md:grid-cols-[80px_1fr] gap-8 items-start"
           >
             {/* YEAR */}
-            <div className="text-xl font-light text-gray-900">
+            <div className="text-lg md:text-xl font-light text-gray-900">
               {item.year}
             </div>
 
-            {/* DOT (CENTERED ON LINE) */}
-            <div className="relative flex justify-center">
-              <span className="absolute top-1.5 h-3 w-3 rounded-full bg-[#b1d436]" />
-            </div>
-
             {/* CONTENT */}
-            <div className="grid gap-6 lg:grid-cols-12 items-start">
-              <div className="lg:col-span-4">
-                <h4 className="text-xl font-medium text-gray-900">
-                  {item.title}
-                </h4>
-                <p className="mt-3 text-gray-700 leading-relaxed">
-                  {item.text}
-                </p>
-              </div>
-
-              <div className="lg:col-span-8">
-                <div className="overflow-hidden rounded-2xl shadow-lg">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
+            <div className="relative">
+              <span className="absolute -left-[28px] md:-left-[48px] top-2 h-3 w-3 rounded-full bg-[#b1d436]" />
+              <div className="overflow-hidden rounded-2xl shadow-lg">
+                <img
+                  src={item.image}
+                  alt={item.year}
+                  className="h-[220px] sm:h-[300px] w-full object-cover"
+                />
               </div>
             </div>
           </motion.div>
@@ -262,6 +215,9 @@ function History() {
   );
 }
 
+/* =====================================================
+   VISION & MISSION — RESPONSIVE
+===================================================== */
 /* =====================================================
    VISION & MISSION — TEXT ONLY
 ===================================================== */
@@ -330,7 +286,7 @@ function VisionMission() {
 }
 
 /* =====================================================
-   CORE VALUES
+   CORE VALUES — RESPONSIVE
 ===================================================== */
 function CoreValues() {
   const values = [
@@ -346,10 +302,10 @@ function CoreValues() {
   return (
     <div className="max-w-3xl">
       {values.map((value, i) => (
-        <div key={value} className="border-b border-gray-300 py-6">
+        <div key={value} className="border-b border-gray-300 py-5">
           <button
             onClick={() => setOpen(open === i ? null : i)}
-            className="flex w-full items-center justify-between text-lg text-gray-900"
+            className="flex w-full items-center justify-between text-base md:text-lg text-gray-900"
           >
             {value}
             <ChevronDown
@@ -362,13 +318,13 @@ function CoreValues() {
           <AnimatePresence>
             {open === i && (
               <motion.p
-                initial={{ opacity: 0, y: -8 }}
+                initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                className="mt-4 text-gray-700 leading-relaxed"
+                exit={{ opacity: 0, y: -6 }}
+                className="mt-3 text-sm md:text-base text-gray-700 leading-relaxed"
               >
-                {value} is a core principle guiding our decisions, operations,
-                and long-term strategy across Gas Group.
+                {value} is a core principle guiding our decisions and long-term
+                strategy across Gas Group.
               </motion.p>
             )}
           </AnimatePresence>

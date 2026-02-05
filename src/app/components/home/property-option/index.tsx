@@ -263,7 +263,7 @@ function History() {
 }
 
 /* =====================================================
-   VISION & MISSION
+   VISION & MISSION — TEXT ONLY
 ===================================================== */
 function VisionMission() {
   const [index, setIndex] = useState(0);
@@ -273,14 +273,12 @@ function VisionMission() {
       title: "Our Vision",
       text:
         "To create and grow a knowledge-based global organisation that seeks worldwide investment opportunities while maximising shareholder value.",
-      image: "/images/about/vision.jpg",
       bg: "from-[#0f172a] to-[#020617]",
     },
     {
       title: "Our Mission",
       text:
         "To become one of the top ten gas producers globally by delivering low-cost, high-quality gas and expanding into emerging markets.",
-      image: "/images/about/mission.jpg",
       bg: "from-[#b1d436] to-[#6f8f1f]",
     },
   ];
@@ -305,26 +303,26 @@ function VisionMission() {
 
       <motion.div
         key={index}
-        initial={{ opacity: 0, x: 32 }}
+        initial={{ opacity: 0, x: 24 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
-        className={`grid gap-16 lg:grid-cols-12 items-center rounded-3xl bg-gradient-to-br ${slides[index].bg} p-16 text-white`}
+        transition={{ duration: 0.7 }}
+        className={`
+          rounded-3xl
+          bg-gradient-to-br ${slides[index].bg}
+          p-10 sm:p-12 md:p-16
+          text-white
+        `}
       >
-        <div className="lg:col-span-5">
-          <h3 className="text-3xl font-light">{slides[index].title}</h3>
-          <p className="mt-6 text-lg leading-relaxed">
+        <div className="max-w-3xl">
+          <h3 className="text-2xl md:text-3xl lg:text-4xl font-light">
+            {slides[index].title}
+          </h3>
+
+          <div className="mt-6 h-[2px] w-16 bg-white/60" />
+
+          <p className="mt-8 text-base md:text-lg leading-relaxed text-white/90">
             {slides[index].text}
           </p>
-        </div>
-
-        <div className="lg:col-span-7">
-          <div className="overflow-hidden rounded-2xl shadow-2xl">
-            <img
-              src={slides[index].image}
-              alt={slides[index].title}
-              className="h-full w-full object-cover"
-            />
-          </div>
         </div>
       </motion.div>
     </div>
